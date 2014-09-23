@@ -9,10 +9,10 @@ var _message = {
 
 var app = {
 
-  server: 'https://api.parse.com/1/classes/chatterbox',
+  server: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
 
   init: function() {
-    this.addMessage(_message);
+    this.fetch();
   },
 
   send: function(message) {
@@ -38,7 +38,11 @@ var app = {
       url: this.server,
       type: 'GET',
       contentType: 'application/json',
+      dataType: 'json',
       success: function (data) {
+        for (var i = 0; i < data.results.length; i++) {
+          app.addMessage(data.results[i]);
+        }
         console.log('chatterbox: Message fetched');
       },
       error: function (data) {
@@ -49,10 +53,12 @@ var app = {
   },
 
   addMessage: function(message) {
-    var $toSend = '<div class="chat">' + message.username + ": " + message.text + '</div>';
-    $('#chats').append('<div>lots of words</div>');
-    console.log('done adding message EXCEPT NOT REALLY')
 
+      var username = message.username.replace(/[^a-z]+/gi, " ");
+      var text = message.text.replace(/[^a-z]+/gi, ", I am a dick");
+
+      var $toSend = '<div class="chat">' + username + ": " + text + '</div>';
+      $('#chats').append($toSend);
   },
 
   clearMessages: function() {
@@ -61,7 +67,9 @@ var app = {
 
   addRoom: function() {},
 
-  handleSubmit: function() {},
+  handleSubmit: function() {
+
+  },
 
 
   addFriend: function() {}
@@ -69,4 +77,11 @@ var app = {
 
 };
 
-app.init();
+$(document).ready(function(){
+  app.init();
+
+  $('.buttonSend').on('click', function() {
+    app.send($('.draft').val());
+    //event.preventDefault();
+  });
+})
