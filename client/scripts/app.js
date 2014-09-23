@@ -1,5 +1,3 @@
-// YOUR CODE HERE:
-
 var app = {
 
   server: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
@@ -12,7 +10,6 @@ var app = {
       that.fetch();
     },2000);
 
-    // setTimeout(setInterval(function(){ that.clearMessages(); },2000), 1000);
   },
 
   send: function(message) {
@@ -26,7 +23,6 @@ var app = {
         console.log('chatterbox: Message sent');
       },
       error: function (data) {
-        // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
         console.error('chatterbox: Failed to send message');
       }
     });
@@ -48,7 +44,6 @@ var app = {
         console.log('chatterbox: Message fetched');
       },
       error: function (data) {
-        // see: https://developer.mozilla.org/en-US/docs/Web/API/console.error
         console.error('chatterbox: Failed to fetch message');
       }
     });
@@ -59,8 +54,8 @@ var app = {
     var text;
 
     if (message.username === undefined || message.text === undefined) {
-      username = "I'm bad at this";
-      text = "Also I don't know how to this. Halp";
+      username = "I'm a terrible person";
+      text = "and I can't format messages properly";
     } else {
       username = message.username.replace(/[^a-z,.!?' ]+/gi, " ");
       text = message.text.replace(/[^a-z,.!?' ]+/gi, ", I am a dick");
@@ -70,8 +65,7 @@ var app = {
   },
 
   clearMessages: function() {
-    $('.chat').remove(); // can also use .html('')
-    console.log('clearing success');
+    $('.chat').remove();
   },
 
   addRoom: function() {},
@@ -86,16 +80,17 @@ var app = {
   },
 
 
-  addFriend: function() {}
+  addFriend: function() {
 
+    //NO FRIENDS :(
+  }
 
 };
 
-$(document).ready(function(){
-  // var USER = location.search.substring(10);
-  // console.log(USER);
-  app.init();
 
+$(document).ready(function(){
+
+  app.init();
 
   $('.buttonSend').on('click', function() {
     app.handleSubmit();
@@ -103,12 +98,10 @@ $(document).ready(function(){
     return false;
   });
   $('.draft').keypress(function (e) {
-  if (e.which == 13) {
-    app.handleSubmit();
-    $('.draft').val('');
-    return false;
-  }
-});
-
-
+    if (e.which == 13) {
+      app.handleSubmit();
+      $('.draft').val('');
+      return false;
+    }
+  });
 });
