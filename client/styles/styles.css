@@ -46,6 +46,14 @@ body {
     line-height: 13px;
 }
 
+a{
+    text-decoration: none;
+    color: gray;
+}
+a:hover {
+    color:orangered;
+}
+
 form {
     padding: 20px;
     padding-left: 0;
@@ -67,6 +75,12 @@ form input[type=text] {
 
 .chat .username {
     font-weight: 800;
+}
+
+.buttonSend {
+    font-size:16px;
+    padding:10px 10px;
+    vertical-align:12px;
 }
 
 .chat:hover {
