@@ -2,6 +2,9 @@ var app = {
 
   server: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
 
+  friends: [],
+
+
   init: function() {
 
     var that = this;
@@ -28,17 +31,28 @@ var app = {
     });
   },
 
-  fetch: function() {
+  fetch: function(targetUsername) {
+    targetUsername = targetUsername || null;
+
     $.ajax({
 
+      targetUsername: targetUsername,
       url: this.server,
       type: 'GET',
       contentType: 'application/json',
       dataType: 'json',
       success: function (data) {
         app.clearMessages();
+
         for (var i = 0; i < data.results.length; i++) {
-          app.addMessage(data.results[i]);
+
+          if (data.results[i].username === targetUsername) {
+            //console.log('found username match', targetUsername);
+            // app.clearMessages();
+            app.addMessage(data.results[i]);
+          } else if (targetUsername === null) {
+            app.addMessage(data.results[i]);
+          }
         }
 
         console.log('chatterbox: Message fetched');
@@ -54,13 +68,17 @@ var app = {
     var text;
 
     if (message.username === undefined || message.text === undefined) {
-      username = "I'm a terrible person";
-      text = "and I can't format messages properly";
+      username = "undefined";
+      text = "undefined";
     } else {
       username = message.username.replace(/[^a-z,.!?' ]+/gi, " ");
       text = message.text.replace(/[^a-z,.!?' ]+/gi, ", I am a dick");
     }
-    var $toSend = '<div class="chat"><a href="">' + username + "</a>: " + text + '</div>';
+    if (app.friends.indexOf(username) !== -1) {
+      username =  "<b>" + username + "</b>";
+      text = "<b>" + text + "</b>";
+    }
+    var $toSend = '<div class="chat"><div class="username">' + username + "</div>: " + text + '</div>';
     $('#chats').append($toSend);
   },
 
@@ -80,10 +98,10 @@ var app = {
   },
 
 
-  addFriend: function() {
+  // addFriend: function() {
 
-    //NO FRIENDS :(
-  }
+  //   //NO FRIENDS :(
+  // }
 
 };
 
@@ -91,6 +109,12 @@ var app = {
 $(document).ready(function(){
 
   app.init();
+
+  $('#chats').on('click', '.username', function() {
+    app.friends.push($(this).text());
+    return false;
+
+  });
 
   $('.buttonSend').on('click', function() {
     app.handleSubmit();
