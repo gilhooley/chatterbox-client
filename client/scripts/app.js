@@ -3,7 +3,10 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
 
   friends: [],
+
   banned: [],
+
+  rooms: [],
 
   messageOptions: '<div id="options"> <button class="choices" id="friend">Add friend</button> <button class="choices" id="ban">Block</button> </div>',
 
@@ -33,30 +36,31 @@ var app = {
     });
   },
 
-  fetch: function(targetUsername) {
+  handleData: function(data, targetUsername) {
     targetUsername = targetUsername || null;
+
+    app.clearMessages();
+
+    for (var i = 0; i < data.results.length; i++) {
+      if (data.results[i].username === targetUsername) {
+        app.addMessage(data.results[i]);
+      } else if (targetUsername === null) {
+        app.addMessage(data.results[i]);
+        app.addRoom(data.results[i].roomname);
+      }
+    }
+  },
+
+  fetch: function() {
 
     $.ajax({
 
-      targetUsername: targetUsername,
       url: this.server,
       type: 'GET',
       contentType: 'application/json',
       dataType: 'json',
       success: function (data) {
-        app.clearMessages();
-
-        for (var i = 0; i < data.results.length; i++) {
-
-          if (data.results[i].username === targetUsername) {
-            //console.log('found username match', targetUsername);
-            // app.clearMessages();
-            app.addMessage(data.results[i]);
-          } else if (targetUsername === null) {
-            app.addMessage(data.results[i]);
-          }
-        }
-
+        app.handleData(data);
         console.log('chatterbox: Message fetched');
       },
       error: function (data) {
@@ -89,7 +93,20 @@ var app = {
     $('.chat').remove();
   },
 
-  addRoom: function() {},
+  addRoom: function(roomname) {
+
+    if (roomname === undefined || roomname === "") {
+      roomname = "lobby";
+    }
+
+    roomname = roomname.replace(/[^a-z,.!?' ]+/gi, "");
+
+    if (app.rooms.indexOf(roomname) === -1) {
+      $('#chatrooms').append('<li>' + roomname + '</li>');
+      app.rooms.push(roomname);
+    }
+
+  },
 
   handleSubmit: function() {
     var msg = {
