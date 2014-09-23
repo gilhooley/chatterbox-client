@@ -1,11 +1,4 @@
 // YOUR CODE HERE:
-//
-//
-var _message = {
-  'username': 'teamFetch',
-  'text': 'doop doop',
-  'roomname': 'Interbutts'
-};
 
 var app = {
 
@@ -53,12 +46,18 @@ var app = {
   },
 
   addMessage: function(message) {
+    var username;
+    var text;
 
-      var username = message.username.replace(/[^a-z]+/gi, " ");
-      var text = message.text.replace(/[^a-z]+/gi, ", I am a dick");
-
-      var $toSend = '<div class="chat">' + username + ": " + text + '</div>';
-      $('#chats').append($toSend);
+    if (message.username === undefined || message.text === undefined) {
+      username = "I'm bad at this";
+      text = "Also I don't know how to this. Halp";
+    } else {
+      username = message.username.replace(/[^a-z,.!?' ]+/gi, " ");
+      text = message.text.replace(/[^a-z,.!?' ]+/gi, ", I am a dick");
+    }
+    var $toSend = '<div class="chat">' + username + ": " + text + '</div>';
+    $('#chats').append($toSend);
   },
 
   clearMessages: function() {
@@ -68,7 +67,12 @@ var app = {
   addRoom: function() {},
 
   handleSubmit: function() {
-
+    var msg = {
+      username: USER,
+      text: $('.draft').val(),
+      roomname: 'abattoir'
+    };
+    this.send(msg);
   },
 
 
@@ -78,10 +82,13 @@ var app = {
 };
 
 $(document).ready(function(){
+  var USER = location.search.substring(84);
+  console.log('user supposed ot be proingint')
+  console.log(USER);
   app.init();
 
+
   $('.buttonSend').on('click', function() {
-    app.send($('.draft').val());
-    //event.preventDefault();
+    app.handleSubmit();
   });
 })
