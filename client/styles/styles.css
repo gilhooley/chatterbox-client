@@ -76,6 +76,15 @@ form input[type=text] {
     padding: 5px;
 }
 
+.choices {
+    height: 20px;
+    width: 90px;
+    margin: 10px;
+    background-color: aliceblue;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
 .chat {
     padding: 5px;
     margin-bottom: 5px;

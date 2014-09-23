@@ -4,7 +4,7 @@ var app = {
 
   friends: [],
 
-  messageOptions: '<div id="options"> <span>hello</span> <span>yes</span> </div>',
+  messageOptions: '<div id="options"> <button class="choices">hello</button> <button class="choices">yes</button> </div>',
 
   init: function() {
 
