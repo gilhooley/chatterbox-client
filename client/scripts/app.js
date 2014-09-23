@@ -4,12 +4,13 @@ var app = {
 
   friends: [],
 
+  messageOptions: '<div id="options"> <span>hello</span> <span>yes</span> </div>',
 
   init: function() {
 
     var that = this;
 
-    setInterval(function(){
+    setTimeout(function(){
       that.fetch();
     },2000);
 
@@ -67,6 +68,7 @@ var app = {
     var username;
     var text;
 
+
     if (message.username === undefined || message.text === undefined) {
       username = "undefined";
       text = "undefined";
@@ -78,7 +80,7 @@ var app = {
       username =  "<b>" + username + "</b>";
       text = "<b>" + text + "</b>";
     }
-    var $toSend = '<div class="chat"><div class="username">' + username + "</div>: " + text + '</div>';
+    var $toSend = '<div class="chat"><a class="username">' + username + '</a>: ' + text + app.messageOptions + '</div>';
     $('#chats').append($toSend);
   },
 
@@ -110,17 +112,21 @@ $(document).ready(function(){
 
   app.init();
 
-  $('#chats').on('click', '.username', function() {
-    app.friends.push($(this).text());
-    return false;
-
-  });
+  // $('#chats').on('hover', '.username', function() {
+  //   $('#options').show();
+  //   console.log('hover handler is working');
+  //   // app.friends.push($(this).text());
+  //   return false;
+  // }, function() {
+  //   $('#options').hide();
+  // });
 
   $('.buttonSend').on('click', function() {
     app.handleSubmit();
     $('.draft').val('');
     return false;
   });
+
   $('.draft').keypress(function (e) {
     if (e.which == 13) {
       app.handleSubmit();
