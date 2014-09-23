@@ -3,14 +3,15 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox?order=-createdAt',
 
   friends: [],
+  banned: [],
 
-  messageOptions: '<div id="options"> <button class="choices">hello</button> <button class="choices">yes</button> </div>',
+  messageOptions: '<div id="options"> <button class="choices" id="friend">Add friend</button> <button class="choices" id="ban">Block</button> </div>',
 
   init: function() {
 
     var that = this;
 
-    setTimeout(function(){
+    setInterval(function(){
       that.fetch();
     },2000);
 
@@ -112,15 +113,6 @@ $(document).ready(function(){
 
   app.init();
 
-  // $('#chats').on('hover', '.username', function() {
-  //   $('#options').show();
-  //   console.log('hover handler is working');
-  //   // app.friends.push($(this).text());
-  //   return false;
-  // }, function() {
-  //   $('#options').hide();
-  // });
-
   $('.buttonSend').on('click', function() {
     app.handleSubmit();
     $('.draft').val('');
@@ -134,4 +126,21 @@ $(document).ready(function(){
       return false;
     }
   });
+
+  $('body').on('click', '#friend', function() {
+    var thatUser = this.parentElement.parentElement.children[0].textContent;
+    if (app.friends.indexOf(thatUser) === -1) {
+      app.friends.push(thatUser);
+    }
+  });
+
+  $('body').on('click', '#ban', function() {
+    var thatUser = this.parentElement.parentElement.children[0].textContent;
+    // TODO
+    // deal with overlap between banned list and friends list
+    if (app.banned.indexOf(thatUser) === -1) {
+      app.banned.push(thatUser);
+    }
+  });
+
 });
